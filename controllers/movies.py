@@ -9,8 +9,8 @@ movies = [
 def index(req):
     return [c for c in movies], 200
 
-def show(req, uid):
-    return find_by_uid(uid), 200
+def show(req, name):
+    return find_by_name(name), 200
 
 def create(req):
     new_movie = req.get_json()
@@ -18,21 +18,13 @@ def create(req):
     movies.append(new_movie)
     return new_movie, 201
 
-def update(req, uid):
-    movie = find_by_uid(uid)
-    data = req.get_json()
-    print(data)
-    for key, val in data.items():
-        movie[key] = val
-    return movie, 200
-
-def destroy(req, uid):
-    movie = find_by_uid(uid)
+def destroy(req, name):
+    movie = find_by_name(name)
     movies.remove(movie)
     return movie, 204
 
-def find_by_uid(uid):
+def find_by_name(name):
     try:
-        return next(movie for movie in movies if movie['id'] == uid)
+        return next(movie for movie in movies if movie['name'] == name)
     except:
-        raise BadRequest(f"We don't have that movie with id {uid}!")
+        raise BadRequest(f"We don't have that movie with name {name}!")
